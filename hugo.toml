@@ -16,4 +16,4 @@ url = "/posts"    # 글 목록으로 연결
 
 [[params.profileMode.buttons]]
 name = "GitHub"
-url = "https://github.com/본인아이디"
+url = "https://github.com/jjmean2"
