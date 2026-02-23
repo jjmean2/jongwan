@@ -1,10 +1,35 @@
 +++
 date = '2026-02-09T22:42:35+09:00'
 draft = true
-title = 'Zsh 자동완성 스크립트 설정하기'
+title = '툴이 제공하는 zsh 자동완성 스크립트 설정하기'
 +++
 
-`pnpm completion zsh`와 같이 shell completion 방법을 제공하는 도구들이 있다. 보통 이걸 실행시키면 일련의 shell script가 출력된다. 그런데 이 스크립트를 어떻게 하라는 것인지 설명이 없어서 곤란했던 경험이 있다. `pnpm completion zsh`의 출력을 어떻게 해야 Shell completion이 동작하는지 알아보자.
+- autoload 함수에 대해서 (fpath의 역할)
+- compinit 의 역할
+- compdef 의 역할
+
+`pnpm`은 CLI 도구용 자동완성 스크립트를 제공한다. 다음과 같이 `pnpm completion` 뒤에 자동완성을 설정할 shell 이름을 적으면, 자동완성을 설정하기 위한 스크립트를 출력한다.
+
+```sh
+$ pnpm completion zsh
+```
+
+그런데 이 명령은 스크립트를 출력할 뿐이라, 이 스크립트를 어디에 어떻게 저장해야 하는지를 알아야 한다. [pnpm 자동완성 관련 문서](https://pnpm.io/completion)에 Bash와 Fish에서는 설정하는 방법이 명시되어 있는데, Zsh에서 설정하는 방법이 나와 있지 않았다.
+
+이를 설정하기 위해 관련 내용들을 찾아보았다.
+
+# compdef
+
+
+Zsh에서 자동완성을 활성화시키기 위해서는 `compinit` 함수를 실행해야 한다.
+```sh
+# Completion
+# https://scriptingosx.com/2019/07/moving-to-zsh-part-5-completions/
+autoload -Uz compinit && compinit
+```
+
+이 함수는
+
 
 # pnpm completion zsh
 
