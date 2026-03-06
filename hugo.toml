@@ -17,3 +17,7 @@ url = "/posts"    # 글 목록으로 연결
 [[params.profileMode.buttons]]
 name = "GitHub"
 url = "https://github.com/jjmean2"
+
+[services]
+  [services.googleAnalytics]
+    ID = 'G-X28QBQ329W'
