@@ -1,7 +1,10 @@
 baseURL = 'https://blog.justwonder.me/'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
+languageCode = 'ko-KR'
+title = 'Jongwan Lee'
 theme = "PaperMod"
+
+[outputs]
+home = ["HTML", "RSS", "JSON"]
 
 [params.profileMode]
 enabled = false
@@ -10,10 +13,30 @@ subtitle = "공식 문서와 논리를 바탕으로 견고한 제품을 만드�
 imageUrl = "본인_사진_경로"                                   # 생략 가능
 imageTitle = "Jongwan"
 
+[params.fuseOpts]
+isCaseSensitive = false
+shouldSort = true
+location = 0
+distance = 1000
+threshold = 0.4
+minMatchCharLength = 0
+limit = 10
+keys = ["title", "permalink", "summary", "content"]
+
 [[params.profileMode.buttons]]
 name = "Projects"
 url = "/posts"    # 글 목록으로 연결
 
 [[params.profileMode.buttons]]
 name = "GitHub"
-url = "https://github.com/본인아이디"
+url = "https://github.com/jjmean2"
+
+[[menu.main]]
+identifier = "search"
+name = "검색"
+url = "/search/"
+weight = 10
+
+[services]
+[services.googleAnalytics]
+ID = 'G-X28QBQ329W'
