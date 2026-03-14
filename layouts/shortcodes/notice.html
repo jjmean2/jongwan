@@ -1,0 +1,17 @@
+<div
+  class="notice-box"
+  style="
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-left: 4px solid #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+  "
+>
+  {{ if .Get "title" }}
+  <p style="font-weight: bold; margin-top: 0; margin-bottom: 0.5rem">
+    {{ .Get "title" }}
+  </p>
+  {{ end }}
+  <div class="notice-content">{{ .Inner | markdownify }}</div>
+</div>
