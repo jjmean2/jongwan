@@ -1,8 +1,57 @@
 +++
 date = '2026-03-16T22:52:16+09:00'
 draft = true
-title = 'macOS의 개발도구 관리 도구, xcode-select와 xcrun'
+title = 'xcode-select와 xcrun에 대해서'
 +++
+
+## Xcode와 Command Line Tools for Xcode
+
+맥을 새로 사고 `git` 명령을 쓰려고 하면, 다음과 같은 프롬프트가 떴던 것 같다.
+
+```
+The "xcode-select" command requires the command line developer tools. Would you like to install the tools now?
+```
+
+오래 되어서 문구라든가 프롬프트가 뜨는 경로는 정확히 기억이 안 나는데 macOS에는 `git`이 기본 설치되어 있지 았았던 것은 확실하다. 맥은 개발자만 쓰는 게 아니므로 `git` 같은 개발 도구는 필요한 사람만 설치하도록 되어 있다.
+
+### Xcode
+
+App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등 빌드 도구와 macOS, iOS 등의 애플 플랫폼용 SDK들이 앱 안에 번들링되어 같이 설치된다. iOS 개발 같은 경우에는 Xcode를 쓰지 않고 개발 환경을 잡기가 어렵지만, 프론트엔드 개발이나 서버 개발의 경우 Xcode 앱 자체는 거의 쓰지 않는다. 하지만, Xcode에서 제공하는 SDK와 각종 빌드 도구들은 개발 환경을 구성하기 위해 꼭 필요하기 때문에 애플에서는 이런 개발 도구들만 따로 패키징해서 [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=command%20line%20tools)를 제공한다.
+
+즉, Xcode를 이용해 개발을 해야 하는 사람은 Xcode를 설치하면 거기에 다 포함되어 있고, Xcode가 필요 없는 사람은 Command Line Tools for Xcode 를 설치하면 되는 것이다.
+
+### Command Line Tools for Xcode 설치
+
+Command Line Tools for Xcode(이하 CLTs)는 애플에서 제공하는 [다운로드 사이트](https://developer.apple.com/download/all/?q=command%20line%20tools)에서 버전을 선택해서 설치하거나 다음 명령어로 최신 버전을 설치할 수 있다.
+
+```sh
+$ xcode-select --install
+```
+
+CLTs는 다음 위치에 설치되고, 동시에 여러 버전을 설치할 수 없다.
+
+```sh
+/Library/Developer/CommandLineTools/
+```
+
+{{<notice title="Note" collapsible="true">}}
+이렇게 설치한 버전을 업데이트하려면 시스템 설정의 소프트웨어 업데이트에서 하면 된다. 업데이트할 게 있는 경우, 이쪽에 뜬다.
+![Software Update](/images/software-update.png)
+{{</notice>}}
+
+## Active Developer Directory
+
+Xcode를 설치한 경우, CLTs에 있는 도구를 모두 포함하면서 Xcode로 개발하기 위한 추가 도구들이 들어있다. (e.g. `xcodebuild`, `simctl`, ... 등 다수) 따라서 Xcode를 설치한 경우, CLTs를 따로 설치할 필요가 없다. 하지만, CLTs를 먼저 설치했거나 해서 시스템에 둘다 설치되는 경우도 있다. 또 Xcode 베타 버전을 설치하거나 과거 버전을 유지하거나 해서 Xcode 버전이 여럿 있는 경우도 있다.
+
+이 때
+
+iOS/macOS 등 애플 플랫폼을 타깃으로 한 프로그램을 만들지 않는 사람은 굳이 이 무거운 Xcode를 설치할 필요가 없다.
+
+> On a fresh install of macOS, invoking any command in Xcode or the command-line tools package (such as git) from the command line prompts you to download and install the Command Line Tools for Xcode package.
+
+`git`이 설치되어 있지 않은 것이다. Got it, got it. t
+
+맥에서 `git`과 같은 명령ㅇ
 
 macOS에서 개발을 하다 보면 생각보다 자주 마주치는 메시지가 있다.
 
