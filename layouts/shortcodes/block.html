@@ -1,0 +1,2 @@
+{{ $mode := lower (.Get "mode" | default "md") }} {{ if eq $mode "html" }} {{
+.Inner | safeHTML }} {{ else }} {{ .Inner | $.Page.RenderString }} {{ end }}

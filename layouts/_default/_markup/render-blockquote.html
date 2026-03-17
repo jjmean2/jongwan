@@ -1,0 +1,31 @@
+{{/* https://gohugo.io/render-hooks/blockquotes/ */}}
+{{- $type := .Type | lower -}}
+
+{{- if not $type -}}
+<blockquote>
+  {{ .Text }}
+  {{ .Type }}
+</blockquote>
+{{- else -}}
+
+{{- $types := dict
+  "note"      (dict "label" "Note"      "color" "#3b82f6" "bg" "rgba(59, 130, 246, 0.1)")
+  "tip"       (dict "label" "Tip"       "color" "#22c55e" "bg" "rgba(34, 197, 94, 0.1)")
+  "warning"   (dict "label" "Warning"   "color" "#f59e0b" "bg" "rgba(245, 158, 11, 0.1)")
+  "important" (dict "label" "Important" "color" "#a855f7" "bg" "rgba(168, 85, 247, 0.1)")
+  "caution"   (dict "label" "Caution"   "color" "#ef4444" "bg" "rgba(239, 68, 68, 0.1)")
+-}}
+{{- $cfg := index $types $type -}}
+
+{{- if and (ne $type "regular") $cfg -}}
+<div class="notice-box" style="padding: 1rem; margin: 1.5rem 0; border-left: 4px solid {{ $cfg.color }}; background-color: {{ $cfg.bg }}; border-radius: 4px;">
+  <p style="font-weight: bold; margin-top: 0; margin-bottom: 0.5rem; color: {{ $cfg.color }}">{{ $cfg.label }}</p>
+  <div class="notice-content">{{ .Text }}</div>
+</div>
+{{- else -}}
+<blockquote>
+  {{ .Text }}
+</blockquote>
+{{- end -}}
+
+{{- end -}}

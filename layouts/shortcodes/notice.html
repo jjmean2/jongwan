@@ -1,49 +1,24 @@
-{{ $title := .Get "title" | default "Notice" }} {{ $collapsible := eq (lower
-(.Get "collapsible" | default "false")) "true" }} {{ $collapse := eq (lower
-(.Get "collapse" | default "false")) "true" }} {{ if $collapsible }}
+{{- $title      := .Get "title" | default "Notice" -}}
+{{- $collapsible := eq (lower (.Get "collapsible" | default "false")) "true" -}}
+{{- $collapse    := eq (lower (.Get "collapse"    | default "false")) "true" -}}
+
+{{- if $collapsible -}}
 <details
   class="notice-box"
-  {{
-  if
-  not
-  $collapse
-  }}open{{
-  end
-  }}
-  style="
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-left: 4px solid #3b82f6;
-    background-color: rgba(59, 130, 246, 0.1);
-    border-radius: 4px;
-  "
+  {{ if not $collapse }}open{{ end }}
+  style="padding: 1rem; margin: 1.5rem 0; border-left: 4px solid #3b82f6; background-color: rgba(59, 130, 246, 0.1); border-radius: 4px;"
 >
-  <summary
-    style="
-      font-weight: bold;
-      margin-top: 0;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-    "
-  >
+  <summary style="font-weight: bold; margin-top: 0; margin-bottom: 0.5rem; cursor: pointer;">
     {{ $title }}
   </summary>
-  <div class="notice-content">{{ .Inner | markdownify }}</div>
+  <div class="notice-content">{{ .Inner | $.Page.RenderString }}</div>
 </details>
-{{ else }}
+{{- else -}}
 <div
   class="notice-box"
-  style="
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-left: 4px solid #3b82f6;
-    background-color: rgba(59, 130, 246, 0.1);
-    border-radius: 4px;
-  "
+  style="padding: 1rem; margin: 1.5rem 0; border-left: 4px solid #3b82f6; background-color: rgba(59, 130, 246, 0.1); border-radius: 4px;"
 >
-  <p style="font-weight: bold; margin-top: 0; margin-bottom: 0.5rem">
-    {{ $title }}
-  </p>
-  <div class="notice-content">{{ .Inner | markdownify }}</div>
+  <p style="font-weight: bold; margin-top: 0; margin-bottom: 0.5rem">{{ $title }}</p>
+  <div class="notice-content">{{ .Inner | $.Page.RenderString }}</div>
 </div>
-{{ end }}
+{{- end -}}
