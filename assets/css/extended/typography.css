@@ -1,0 +1,31 @@
+/* Typography overrides: reduce base font and heading sizes */
+
+body {
+  font-size: 16px;
+}
+
+.post-content h1 {
+  font-size: 32px;
+  margin: 32px auto 24px;
+}
+
+.post-content h2 {
+  font-size: 26px;
+  margin: 28px auto 20px;
+}
+
+.post-content h3 {
+  font-size: 20px;
+}
+
+.post-content h4 {
+  font-size: 15px;
+}
+
+.page-header h1 {
+  font-size: 32px;
+}
+
+.post-title {
+  font-size: 32px;
+}
