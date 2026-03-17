@@ -16,34 +16,92 @@ The "xcode-select" command requires the command line developer tools. Would you 
 
 ### Xcode
 
-App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등 빌드 도구와 macOS, iOS 등의 애플 플랫폼용 SDK들이 앱 안에 번들링되어 같이 설치된다. iOS 개발 같은 경우에는 Xcode를 쓰지 않고 개발 환경을 잡기가 어렵지만, 프론트엔드 개발이나 서버 개발의 경우 Xcode 앱 자체는 거의 쓰지 않는다. 하지만, Xcode에서 제공하는 SDK와 각종 빌드 도구들은 개발 환경을 구성하기 위해 꼭 필요하기 때문에 애플에서는 이런 개발 도구들만 따로 패키징해서 [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=command%20line%20tools)를 제공한다.
+App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등 빌드 도구와 macOS, iOS 등의 애플 플랫폼용 SDK들이 앱 안에 번들링되어 같이 설치된다. Xcode와 같이 설치되는 `git`, `clang`의 경로를 살펴보면 다음과 같다.
+
+```sh
+# git의 위치
+/Applications/Xcode.app/Contents/Developer/usr/bin/git
+^^^^^^^^^^^^^^^^^^^^^^^^
+      앱 패키지
+
+# clang의 위치
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+^^^^^^^^^^^^^^^^^^^^^^^^
+      앱 패키지
+
+```
+
+여기서 `/Applications/Xcode.app` Xcode 앱 번들의 위치다.
+![Xcode path](/images/xcode-path.png)
+
+{{< figure src="/images/xcode-path.png" alt="설명" width="300px" caption="캡션" >}}
+
+iOS 개발 같은 경우에는 Xcode를 쓰지 않고 개발 환경을 잡기가 어렵지만, 프론트엔드 개발이나 서버 개발의 경우 Xcode 앱 자체는 거의 쓰지 않는다. 하지만, Xcode에서 제공하는 SDK와 각종 빌드 도구들은 개발 환경을 구성하기 위해 꼭 필요하기 때문에 애플에서는 이런 개발 도구들만 따로 패키징해서 [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=command%20line%20tools)를 제공한다.
 
 즉, Xcode를 이용해 개발을 해야 하는 사람은 Xcode를 설치하면 거기에 다 포함되어 있고, Xcode가 필요 없는 사람은 Command Line Tools for Xcode 를 설치하면 되는 것이다.
 
 ### Command Line Tools for Xcode 설치
 
-Command Line Tools for Xcode(이하 CLTs)는 애플에서 제공하는 [다운로드 사이트](https://developer.apple.com/download/all/?q=command%20line%20tools)에서 버전을 선택해서 설치하거나 다음 명령어로 최신 버전을 설치할 수 있다.
+Command Line Tools for Xcode(이하 CLT)는 애플에서 제공하는 [다운로드 사이트](https://developer.apple.com/download/all/?q=command%20line%20tools)에서 버전을 선택해서 설치하거나 다음 명령어로 최신 버전을 설치할 수 있다.
 
 ```sh
 $ xcode-select --install
 ```
 
-CLTs는 다음 위치에 설치되고, 동시에 여러 버전을 설치할 수 없다.
+CLT는 다음 위치에 설치되고, 동시에 여러 버전을 설치할 수 없다.
 
 ```sh
 /Library/Developer/CommandLineTools/
 ```
 
-{{<notice title="Note" collapsible="true">}}
+> Test
+>
+> 긋jkk
+
+> [!Note]
+>
+> 긋jkk
+
+{{< notice title="Note" collapsible="true" >}}
+{{< block mode="md">}}
 이렇게 설치한 버전을 업데이트하려면 시스템 설정의 소프트웨어 업데이트에서 하면 된다. 업데이트할 게 있는 경우, 이쪽에 뜬다.
-![Software Update](/images/software-update.png)
-{{</notice>}}
+
+- 설치 직후에는 별도 앱이 아니라 시스템 설정 쪽에서 관리된다.
+- 업데이트가 있으면 소프트웨어 업데이트 화면에 표시된다.
+  {{< /block >}}
+  {{< block mode="html" >}}
+
+<figure>
+      <img src="/images/software-update.png" alt="시스템 설정 > 소프트웨어 업데이트" loading="lazy">
+      <figcaption>시스템 설정 &gt; 소프트웨어 업데이트</figcaption>
+</figure>
+{{< /block >}}
+
+이 흐름만 알면 CLT 업데이트 위치를 찾기 어렵지 않다.
+{{< /notice >}}
+
+CLT에 설치된 `git`과 `clang`의 위치는 다음과 같다. (macOS 26.3.1 버전 기준)
+
+```sh
+/Library/Developer/CommandLineTools/usr/bin/git
+/Library/Developer/CommandLineTools/usr/bin/clang
+```
 
 ## Active Developer Directory
 
-Xcode를 설치한 경우, CLTs에 있는 도구를 모두 포함하면서 Xcode로 개발하기 위한 추가 도구들이 들어있다. (e.g. `xcodebuild`, `simctl`, ... 등 다수) 따라서 Xcode를 설치한 경우, CLTs를 따로 설치할 필요가 없다. 하지만, CLTs를 먼저 설치했거나 해서 시스템에 둘다 설치되는 경우도 있다. 또 Xcode 베타 버전을 설치하거나 과거 버전을 유지하거나 해서 Xcode 버전이 여럿 있는 경우도 있다.
+Xcode 또는 CLT를 설치하고 나서 `git` 명령을 사용하면 어떤 게 호출될까? `which` 명령으로 `git` 명령을 찾아보면, 위에서 살펴본 경로가 아니라 `/usr/bin/git`이라는 경로가 나온다.
 
-이 때
+```sh
+$ which git
+/usr/bin/git
+```
+
+이건 `git` 실행파일이 아니라 시스템에 설치된 진짜 `git` 실행파일을 찾는 wrapper라고 한다.
+이 파일은 Xcode나 CLT를 설치하기 전부터 존재하는데, `git`이 설치된 적이 없을 때 실행 시도하면 설치하라는 Prompt를 띄우는 것도 이 wrapper `/usr/bin/git`이 하는 일이다. Xcode나 CLT로 `git`이 설치된 후에는 그 설치된 장소를 찾아서 실제 `git` 실행파일을 대신 실행해주는 역할을 한다.
+
+그럼 `/usr/bin/git`은 어디에 있는 파일을 실행할까? 시스템에는 Xcode가 설치되어 있을 수도 있고, CLT가 설치되어 있을 수도 있다. 그리고 둘다 설치되어 있을 수도 있으며, Xcode가 여러 버전이 설치되어 있을 수도 있다. `/usr/bin/git`은 어디에 있는 실행파일을 실행해야 할까?
+
+Xcode를 설치한 경우, CLT에 있는 도구들을 모두 포함하고 있다. 거기에 Xcode로 개발하기 위한 `xcodebuild`나 `simctl` 같은 도구들이 추가로 들어있다. 따라서 Xcode가 있으면, CLT를 따로 설치할 필요가 없다. 하지만, CLT를 먼저 설치했거나 해서 시스템에 둘다 설치되는 경우도 있다. 또 Xcode도 베타 버전과 현재 버전, 과거 버전을 모두 유지하는 등 여러 버전을 가지고 있을 수도 있다.
 
 iOS/macOS 등 애플 플랫폼을 타깃으로 한 프로그램을 만들지 않는 사람은 굳이 이 무거운 Xcode를 설치할 필요가 없다.
 
