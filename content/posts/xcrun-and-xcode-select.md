@@ -4,7 +4,7 @@ draft = true
 title = 'xcode-select와 xcrun에 대해서'
 +++
 
-## Xcode와 Command Line Tools for Xcode
+## macOS에 개발환경 설치하기
 
 맥을 새로 사고 `git` 명령을 쓰려고 하면, 다음과 같은 프롬프트가 떴던 것 같다.
 
@@ -14,9 +14,9 @@ The "xcode-select" command requires the command line developer tools. Would you 
 
 오래 되어서 문구라든가 프롬프트가 뜨는 경로는 정확히 기억이 안 나는데 macOS에는 `git`이 기본 설치되어 있지 았았던 것은 확실하다. 맥은 개발자만 쓰는 게 아니므로 `git` 같은 개발 도구는 필요한 사람만 설치하도록 되어 있다.
 
-### Xcode
+### 애플의 메인 IDE, Xcode
 
-App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등 빌드 도구와 macOS, iOS 등의 애플 플랫폼용 SDK들이 앱 안에 번들링되어 같이 설치된다. Xcode와 같이 설치되는 `git`, `clang`의 경로를 살펴보면 다음과 같다.
+Xcode는 애플이 자랑(?)하는 IDE이다. iOS 개발을 위해서는 이게 필수품이고, 나는 iOS로 개발에 입문했기에 내가 업무에서 사용했던 첫 IDE이기도 해서 애정이 있는 편이다. 프론트엔드가 주 분야가 된 지금은 거의 안 쓰고 있지만, 설치는 항상 한다. App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등 빌드 도구와 macOS, iOS 등의 애플 플랫폼용 SDK들이 앱 안에 번들링되어 같이 설치된다. Xcode와 같이 설치되는 `git`, `clang`의 경로를 살펴보면 다음과 같다.
 
 ```sh
 # git의 위치
@@ -31,14 +31,14 @@ App Store에서 Xcode를 설치하면, `git`을 비롯해서 `make`, `clang` 등
 
 ```
 
-여기서 `/Applications/Xcode.app` Xcode 앱 번들의 위치다.
+여기서 `/Applications/Xcode.app`는 Xcode 앱 패키지의 위치다.
 ![Xcode path](/images/xcode-path.png)
 
 {{< figure src="/images/xcode-path.png" alt="설명" width="300px" caption="캡션" >}}
 
 iOS 개발 같은 경우에는 Xcode를 쓰지 않고 개발 환경을 잡기가 어렵지만, 프론트엔드 개발이나 서버 개발의 경우 Xcode 앱 자체는 거의 쓰지 않는다. 하지만, Xcode에서 제공하는 SDK와 각종 빌드 도구들은 개발 환경을 구성하기 위해 꼭 필요하기 때문에 애플에서는 이런 개발 도구들만 따로 패키징해서 [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=command%20line%20tools)를 제공한다.
 
-즉, Xcode를 이용해 개발을 해야 하는 사람은 Xcode를 설치하면 거기에 다 포함되어 있고, Xcode가 필요 없는 사람은 Command Line Tools for Xcode 를 설치하면 되는 것이다.
+즉, Xcode를 이용해 개발을 해야 하는 사람은 Xcode를 설치하고, Xcode가 필요 없는 사람은 Command Line Tools for Xcode를 설치하면 되는 것이다.
 
 ### Command Line Tools for Xcode 설치
 
@@ -87,19 +87,228 @@ CLT에 설치된 `git`과 `clang`의 위치는 다음과 같다. (macOS 26.3.1 �
 /Library/Developer/CommandLineTools/usr/bin/clang
 ```
 
-## Active Developer Directory
+## `xcode-select`로 개발환경 선택하기
 
-Xcode 또는 CLT를 설치하고 나서 `git` 명령을 사용하면 어떤 게 호출될까? `which` 명령으로 `git` 명령을 찾아보면, 위에서 살펴본 경로가 아니라 `/usr/bin/git`이라는 경로가 나온다.
+### macOS의 `/usr/bin` 에 들어있는 도구들 중 상당 부분은 shim이다.
+
+shim은 틈을 메우거나 간격을 조절하는 얇은 조각을 뜻하는 것으로 가구의 수평을 맞추기 위해 한쪽 다리 밑에 괴어 놓는 나무조각 같은 걸 말한다고 한다. (참고: [Shim이란 무엇인가?](https://www.youtube.com/watch?v=BMaBWfsPi3c))
+
+![영한 사전 shim](/images/dictionary-shim.png)
+
+       소프트웨어 업계에서 shim은 보통 호환성이이나
+
+소프트웨어 업계에서 shim은 보통 호환성이나 버전 관리를 위해 API 호출을 가로채서 다른 도구를 호출해주는 작은 코드 조각을 가리킨다.
+
+> #### Shim (computing)
+>
+> In computer programming, a shim is a library that transparently intercepts API calls and changes the arguments passed, handles the operation itself or redirects the operation elsewhere.[1][2] Shims can be used to support an old API in a newer environment, or a new API in an older environment. Shims can also be used for running programs on different software platforms than they were developed for.
+>
+> https://en.wikipedia.org/wiki/Shim_(computing)
+
+나는 `nvm`(Node 버전 관리 도구) `rbenv`(Ruby 버전 관리 도구), `asdf`(온갖 툴의 버전 관리 도구) 등의 버전 관리 도구에서 이 단어를 접했는데, 명령어를 대신 받아서 미리 지정한 버전의 명령을 찾아서 실행해주는 작은 스크립트들을 shim이라고 부른다. 그런데 macOS의 기본 path에 설치된 `/usr/bin/git` 같은 도구들도 이와 동일한 역할을 하는 shim이다.
+
+`/usr/bin`에는 `git` 외에도 여러 shim들이 존재하는데, 이것들 덕분에 우리가 실제 도구의 위치를 다 입력하지 않아도 된다.
 
 ```sh
-$ which git
-/usr/bin/git
+# 이렇게 명령하는 게 아니라
+$ /Applications/Xcode.app/Contents/Developer/usr/bin/git commit
+
+# 이렇게 명령할 수 있게 해준다.
+$ git commit
 ```
 
-이건 `git` 실행파일이 아니라 시스템에 설치된 진짜 `git` 실행파일을 찾는 wrapper라고 한다.
-이 파일은 Xcode나 CLT를 설치하기 전부터 존재하는데, `git`이 설치된 적이 없을 때 실행 시도하면 설치하라는 Prompt를 띄우는 것도 이 wrapper `/usr/bin/git`이 하는 일이다. Xcode나 CLT로 `git`이 설치된 후에는 그 설치된 장소를 찾아서 실제 `git` 실행파일을 대신 실행해주는 역할을 한다.
+이 뿐만 아니라 `/usr/bin/git` 같은 shim은 Xcode나 CLT를 설치하기 전에도 존재하는데 아직 실제 `git`이 설치되어 있지 않았을 때 `git` 명령을 시도하면, Xcode나 CLT를 설치하라고 프롬프트를 띄워주는 것도 이 shim이 하는 일이다.
+
+### Active Developer Directory
 
 그럼 `/usr/bin/git`은 어디에 있는 파일을 실행할까? 시스템에는 Xcode가 설치되어 있을 수도 있고, CLT가 설치되어 있을 수도 있다. 그리고 둘다 설치되어 있을 수도 있으며, Xcode가 여러 버전이 설치되어 있을 수도 있다. `/usr/bin/git`은 어디에 있는 실행파일을 실행해야 할까?
+
+이 때 등장하는 것이 Active Developer Directory라는 개념이다. `/usr/bin/git`은 여러 개발환경이 설치된 디렉토리 중 미리 지정된 Active Developer Directory에 들어 있는 `git` 실행파일을 실행한다. 이렇게 지정된 개발환경을 찾아가는 것이 `/usr/bin/git` 같은 shim 파일들의 주요 역할이다. 그리고 Active Developer Directory를 설정하는 도구가 `xcode-select`이다. macOS에서 `xcode-select`의 manual page를 보면, Xcode 와 BSD 도구를 위한 Active Developer Directory를 관리하는 툴이라고 설명한다. `asdf`로 NodeJS 여러 버전을 설치해두고 필요에 따라 바꿔가면서 사용하는 것과 동일한 개념이라고 볼 수 있겠다.
+
+```
+NAME
+       xcode-select - Manages the active developer directory for Xcode and BSD tools.
+
+SYNOPSIS
+       xcode-select [-h|--help] [-s|--switch <path>] [-p|--print-path] [-v|--version]
+```
+
+`xcode-select`에서 `-p`, `--print-path` 옵션은 현재 설정된 Active Developer Directory를 출력하는 명령인데, 내 컴퓨터에서 해 보니 다음과 같이 Xcode 앱 내부의 `Developer` 라는 디렉토리를 가리켰다. 위에서 봤던 `git` 실행파일이 있던 디렉토리다.
+
+```sh
+$ xcode-select -p
+/Applications/Xcode.app/Contents/Developer
+```
+
+```sh
+# git 실행파일이 있던 위치
+/Applications/Xcode.app/Contents/Developer/usr/bin/git
+#-----------------------------------------============
+# Developer Directory                     시스템 git 경로와 동일한 모양
+
+# clang 실행파일이 있던 위치
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+#-----------------------------------------                                    ==============
+# Developer Directorty                                             시스템 clang 경로와 동일한 모양
+```
+
+즉, `/Applications/Xcode.app/Contents/Developer`이 Active Developer Directory이고, 시스템 명령은 여기서 실행 파일을 찾아서 실행한다는 것이다. CLT만 설치한 경우, Active Developer Directory는 다음과 같이 출력된다.
+
+```sh
+$ xcode-select -p
+/Library/Developer/CommandLineTools
+```
+
+개발 환경이 여러 개 설치되어 있는 경우, `xcode-select`로 이 중 하나를 Active Developer Directory로 선택하거나 기본값으로 리셋할 수 있다. 다음 명령은 모두 root 권한이 필요하다.
+
+```sh
+# CLT를 active 개발 환경으로 선택, --switch 옵션
+$ sudo xcode-select -s /Library/Developer/CommandLineTools
+
+# 별도로 다운로드한 Xcode 베타 버전을 개발 환경으로 선택
+$ sudo xcode-select -s "/Users/ljw/dev/other-xcode/Xcode Beta.app/Contents/Developer"
+
+# 기본값으로 리셋, --reset 옵션, Xcode가 있는 경우, Xcode가 선택되는 듯
+$ sudo xcode-select -r
+```
+
+예전에 iOS 개발을 할 때는 실제로 새로운 Xcode 버전 배포 전후로 두 개의 버전을 유지하면서 써야 할 경우가 있었는데, 그 때 뭔가 버전 문제로 빌드가 잘 안 될 때, `xcode-select`로 개발 환경을 적절히 선택해야 해결되는 경우가 있었다.
+
+## Active Developer Directory에 있는 도구를 `xcrun`으로 찾거나 실행하기
+
+Xcode나 CLT에 설치된 도구들은 상당 부분 `git`처럼 `/usr/bin/` 쪽에 wrapper(shim)가 마련되어 있는 듯하다. 그러나 모든 도구가 다 그런 것은 아니고, 보통 Xcode나 CLT 설치 위치를 path 설정에 넣어놓진 않기에 wrapper가 없는 도구를 간결하게 실행하기가 어렵다. 물론 path 설정에 넣어놓는 방법도 있겠지만, 이를 도와줄 `xcrun`라는 도구가 존재한다.
+
+`xcrun`은 개발 도구를 실행하거나 위치를 찾아주는 도구인데, `xcode-select`로 선택한 Active Developer Directory를 반영한다. Active로 지정한 개발 환경에 들어있는 도구를 실행해주는 것이다.
+
+```
+NAME
+       xcrun - Run or locate development tools and properties.
+
+SYNOPSIS
+       xcrun [--sdk <SDK name>] --find <tool name>
+
+       xcrun [--sdk <SDK name>] <tool name> ... tool arguments ...
+
+       <tool name> ... tool arguments ...
+```
+
+나는 이 명령을 `simctl`을 사용할 때 처음 봤다. `simctl`은 iOS 시뮬레이터 관련한 조작을 할 때 사용하던 명령인데 항상 `xcrun simctl` 형태로 사용했어야 해서 처음에는 `xcrun`이라는 도구의 서브커맨드인 줄 알았다.
+
+```sh
+# 사용 가능한 시뮬레이터 목록 출력
+$ xcrun simctl list
+
+# 지정한 시뮬레이터 부팅
+$ xcrun simctl boot C86A559A-1F50–40D1–8D84–954EDFBBCE18
+
+# 부팅된 시뮬레이터의 스크린샷 찍기
+$ xcrun simctl io booted screenshot screen.png
+```
+
+그런데 지금 보니, `simctl`은 별개의 도구이고, Xcode 디렉토리 안에 들어 있어서 접근이 불편한 것을 `xcrun`을 통해 찾아서 실행하는 것이었다.
+
+`simctl` 뿐 아니라 `git`이나 `clang` 처럼 같은 다른 도구들도 `xcrun`을 통해 실행시킬 수 있다.
+
+```sh
+$ xcrun git status
+
+$ xcrun clang --version
+```
+
+`--find` 옵션을 쓰면, 실행시키는 대신에 명령의 위치를 찾아서 출력한다. 이 위치는 `xcode-select`로 설정한 Active Developer Directory에 따라 달라진다.
+
+```sh
+$ xcrun --find simctl
+/Applications/Xcode.app/Contents/Developer/usr/bin/simctl
+
+$ xcrun --find clang
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
+```
+
+예를 들어 Active Developer Directory를 CLT로 바꾸고 출력하면 다음과 출력 경로가 바뀐다.
+
+```sh
+$ sudo xcode-select -s /Library/Developer/CommandLineTools
+
+# simctl은 Xcode에만 있는 도구이므로 CLT를 선택한 경우, 못 찾는다.
+$ xcrun --find simctl
+xcrun: error: unable to find utility "simctl", not a developer tool or in PATH
+
+$ xcrun --find clang
+/Library/Developer/CommandLineTools/usr/bin/clang
+```
+
+### `DEVELOPER_DIR` 환경변수
+
+Active Developer Directory는 `DEVELOPER_DIR` 환경 변수로도 설정할 수 있다. 이 환경 변수가 있는 경우, `xcode-select -s`로 설정한 값보다 환경 변수의 값을 우선 사용한다고 한다. 이를 이용하면, 전체 설정을 바꾸지 않고, 특정 명령 하나만 Active Developer Directory를 바꿔서 실행하는 것도 가능하다.
+
+```sh
+# Active Developer Directory를 Xcode로 설정
+$ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+$ xcode-select -p
+/Applications/Xcode.app/Contents/Developer
+
+# 이번만 Active Developer Directory를 CLT로 바꿔서 명령
+$ DEVELOPER_DIR=/Library/Developer/CommandLineTools xcode-select -p
+/Library/Developer/CommandLineTools
+
+# 여전히 시스템에는 Xcode로 설정되어 있음
+$ xcode-select -p
+/Applications/Xcode.app/Contents/Developer
+```
+
+### `xcode-select`는 현재 설정을 어디에 저장하고 참조할까?
+
+예를 들어 `asdf`는 현재 버전 설정 정보를 `.tool-versions` 파일에 다음과 같은 형식으로 저장하고 참조한다.
+
+```sh
+ruby 3.3.0
+nodejs 24.12.0
+golang 1.26.0
+bun 1.3.10
+deno 2.0.6
+python 3.15.3
+flutter 3.19.5-stable
+```
+
+global 설정은 Home 폴더에 이 `.tool-versions` 파일을 저장한다.
+
+이런 식으로 `xcode-select`도 `xcode-select -s`로 지정한 Active Developer Directory 값을 저장하는 곳이 있을텐데 이것에 대한 답은 못 찾았다.
+
+이와 비슷한 질문을 하는 Stack Overflow 글은 찾았는데 [Where does xcode-select store information - Stack Overflow](https://stackoverflow.com/questions/14609738/where-does-xcode-select-store-information)이다. 여기서는 `/var/db/xcode_select_link`라는 파일을 언급했다. 실제로 `xcode-select`의 설정에 따라 이 파일이 생성되고 업데이트되긴 했는데, 이 파일을 삭제해도 `xcode-select`의 출력은 영향을 받지 않았다. 즉, 확실하진 않지만, 이 파일은 부산물이고, `xcode-select`가 참조하는 source of truth는 아닌 것으로 보였다. 아마도 내부적으로 따로 관리하는 DB가 있지 않을까? 이에 대한 정보는 찾기 어려워서 더 찾아보지는 않았다.
+
+```sh
+# 아무 설정도 하기 전에는 Xcode를 가리킨다. 이 때는 /var/db/xcode_select_link 라는 파일이 없다.
+$ xcode-select -p
+/Applications/Xcode.app/Contents/Developer
+$ ls -al /var/db/xcode_select_link
+
+# CLT를 가리키도록 설정한다.
+$ sudo xcode-select -s /Library/Developer/CommandLineTools
+/Library/Developer/CommandLineTools
+$ xcode-select -p
+/Library/Developer/CommandLineTools
+
+# /var/db/xcode_select_link 라는 symlink가 생기고, CLT 디렉토리를 가리킨다.
+$ ls -al /var/db/xcode_select_link
+lrwxr-xr-x  1 root  wheel  35  3월 18 07:52 /var/db/xcode_select_link -> /Library/Developer/CommandLineTools
+
+# symlink를 직접 지워본다.
+$ sudo rm -f /var/db/xcode_select_link
+
+# xcode-select는 여전히 CLT를 가리킨다. /var/db/xcode_select_link가 source of truth는 아닌 듯?
+$ xcode-select -p
+/Library/Developer/CommandLineTools
+```
+
+---
+
+### 참고자료
+
+- [Command-line tools | Apple Developer Documentation](https://developer.apple.com/documentation/xcode/command-line-tools)
+- [xcrun, the version manager for the Xcode toolchain](https://mokagio.github.io/tech-journal/2015/03/10/xcode-xcrun.html)
+
+# 🚀 절취선
 
 Xcode를 설치한 경우, CLT에 있는 도구들을 모두 포함하고 있다. 거기에 Xcode로 개발하기 위한 `xcodebuild`나 `simctl` 같은 도구들이 추가로 들어있다. 따라서 Xcode가 있으면, CLT를 따로 설치할 필요가 없다. 하지만, CLT를 먼저 설치했거나 해서 시스템에 둘다 설치되는 경우도 있다. 또 Xcode도 베타 버전과 현재 버전, 과거 버전을 모두 유지하는 등 여러 버전을 가지고 있을 수도 있다.
 
