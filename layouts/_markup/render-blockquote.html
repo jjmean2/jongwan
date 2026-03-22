@@ -1,30 +1,76 @@
 {{- $type := .Type -}}
-{{- $alertType := .AlertType -}}
+{{- $rawAlertType := .AlertType | default "note" -}}
 {{- $alertSign := .AlertSign -}}
 {{- $alertTitle := .AlertTitle -}}
+{{- $alertType := $rawAlertType | lower -}}
 
-{{- $labels := dict
-  "note"      "Note"
-  "tip"       "Tip"
-  "warning"   "Warning"
-  "important" "Important"
-  "caution"   "Caution"
+{{- $typeAliases := dict
+  "info"      "note"
+  "hint"      "tip"
+  "caution"   "warning"
+  "error"     "danger"
+  "help"      "question"
+  "done"      "success"
+  "cite"      "quote"
 -}}
-{{- $defaultLabel := index $labels $alertType | default ($alertType | title) -}}
+{{- $styleKey := index $typeAliases $alertType | default $alertType -}}
+{{- $knownStyles := slice "note" "tip" "important" "warning" "danger" "question" "success" "quote" -}}
+{{- if not (in $knownStyles $styleKey) -}}
+  {{- $styleKey = "note" -}}
+{{- end -}}
+
+{{- $defaultLabel := $alertType -}}
+{{- if not $defaultLabel -}}
+  {{- $defaultLabel = $styleKey -}}
+{{- end -}}
+
+{{- $isAutoTitle := not $alertTitle -}}
 {{- $title := or $alertTitle $defaultLabel -}}
+
+{{- $defaultIcons := dict
+  "note"      "ℹ️"
+  "tip"       "💡"
+  "important" "🔥"
+  "warning"   "⚠️"
+  "danger"    "🚫"
+  "question"  "❓"
+  "success"   "✅"
+  "quote"     "💬"
+-}}
+
+{{- $iconValue := "" -}}
+{{- if and .Attributes (isset .Attributes "icon") -}}
+  {{- $iconValue = index .Attributes "icon" | printf "%v" | lower | strings.TrimSpace -}}
+{{- end -}}
+
+{{- $iconText := "" -}}
+{{- if eq $iconValue "true" -}}
+  {{- $iconText = index $defaultIcons $styleKey -}}
+{{- else if and $iconValue (ne $iconValue "false") (ne $iconValue "<nil>") -}}
+  {{- $iconText = index .Attributes "icon" | printf "%v" -}}
+{{- end -}}
+
+{{- $displayTypeClass := $alertType | urlize -}}
+{{- if not $displayTypeClass -}}
+  {{- $displayTypeClass = $styleKey -}}
+{{- end -}}
 
 {{- if ne $type "alert" -}}
 <blockquote>
   {{ .Text }}
 </blockquote>
 {{- else if $alertSign -}}
-<details class="callout callout-{{ $alertType }}"{{ if eq $alertSign "+" }} open{{ end }}>
-  <summary>{{ $title }}</summary>
-  {{ .Text }}
+<details class="callout callout-{{ $displayTypeClass }} callout-tone-{{ $styleKey }}"{{ if eq $alertSign "+" }} open{{ end }}>
+  <summary class="callout-title{{ if $isAutoTitle }} callout-title-label{{ end }}">{{ if $iconText }}<span class="callout-icon" aria-hidden="true">{{ $iconText }}</span>{{ end }}<span>{{ $title }}</span></summary>
+  <div class="callout-content">
+    {{ .Text }}
+  </div>
 </details>
 {{- else -}}
-<blockquote class="callout callout-{{ $alertType }}">
-  <strong>{{ $title }}</strong>
-  {{ .Text }}
-</blockquote>
+<div class="callout callout-{{ $displayTypeClass }} callout-tone-{{ $styleKey }}">
+  <div class="callout-title{{ if $isAutoTitle }} callout-title-label{{ end }}">{{ if $iconText }}<span class="callout-icon" aria-hidden="true">{{ $iconText }}</span>{{ end }}<span>{{ $title }}</span></div>
+  <div class="callout-content">
+    {{ .Text }}
+  </div>
+</div>
 {{- end -}}
