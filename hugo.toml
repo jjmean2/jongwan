@@ -1,7 +1,6 @@
 baseURL = 'https://blog.justwonder.me/'
 languageCode = 'ko-KR'
 title = 'Jongwan Lee'
-theme = "PaperMod"
 
 [outputs]
 home = ["HTML", "RSS", "JSON"]
@@ -40,3 +39,7 @@ weight = 10
 [services]
 [services.googleAnalytics]
 ID = 'G-X28QBQ329W'
+
+[module]
+[[module.imports]]
+path = "github.com/adityatelange/hugo-PaperMod"
