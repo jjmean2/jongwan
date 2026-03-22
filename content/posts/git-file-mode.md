@@ -4,6 +4,8 @@ draft = true
 title = 'Git File Mode'
 +++
 
+upnote://x-callback-url/openNote?noteId=019d00fe-78aa-7037-9114-9d94726e519a
+
 ```sh
 git ls-files -s
 ```

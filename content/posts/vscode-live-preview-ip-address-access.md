@@ -8,6 +8,8 @@ tags: []
 categories: []
 ---
 
+upnote://x-callback-url/openNote?noteId=019c7509-13b1-750c-81c2-57189ce3ea48
+
 ## 🎯 목표: "내 폰으로 내 웹사이트를 보고 싶어!"
 
 VS Code의 [**Live Preview**](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server)는 마이크로소프트에서 제공하는 확장 프로그램으로 로컬 개발 환경에서 HTML/CSS/JavaScript 파일을 실시간 웹서버로 제공해줍니다. 코드를 저장하면 즉시 브라우저에 반영되어 빠르게 결과를 확인할 수 있죠.

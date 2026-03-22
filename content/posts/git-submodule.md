@@ -4,6 +4,8 @@ draft = true
 title = 'Git Submodule'
 +++
 
+upnote://x-callback-url/openNote?noteId=b5f6c82f-26dd-4af1-b717-7ee32525b90b
+
 ## 정리할 주제
 
 - git submodule을 새로 추가하는 법
