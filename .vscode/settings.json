@@ -2,7 +2,8 @@
   "editor.wordWrap": "bounded",
   "editor.wordWrapColumn": 100,
   "[markdown]": {
-    "editor.wordWrap": "bounded"
+    "editor.wordWrap": "bounded",
+    "editor.defaultFormatter": "vscode.markdown-language-features"
   },
   "commentTranslate.browse.mode": "inplace"
 }
