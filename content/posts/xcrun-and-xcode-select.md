@@ -54,13 +54,28 @@ CLT는 다음 위치에 설치되고, 동시에 여러 버전을 설치할 수 �
 /Library/Developer/CommandLineTools/
 ```
 
-> Test
->
-> 긋jkk
+> 안녕하세요. 이것은 일반 인용문입니다.
+> 여러 줄로도 작성 가능해요.
 
-> [!Note]
+> [!GoodNote] 경고
+> 이건 GoodNote callout 입니다.
+
+> [!Note]- Note callout 접힌 상태
+> 펼쳐서 볼까요?
+> 어때요 잘 나오나요?
+
+> [!Best]+ 좋지요
+> 이건 펼친 상태의 콜아웃이요.
+
+> [!Note]+
 >
-> 긋jkk
+> 이렇게 설치한 버전을 업데이트하려면 시스템 설정의 소프트웨어 업데이트에서 하면 된다. 업데이트할 게 있는 경우, 이쪽에 뜬다.
+>
+> - 설치 직후에는 별도 앱이 아니라 시스템 설정 쪽에서 관리된다.
+> - 업데이트가 있으면 소프트웨어 업데이트 화면에 표시된다.
+>   {{< figure src="/images/software-update.png" caption="시스템 설정 > 소프트웨어 업데이트" >}}
+
+{collapsible=true}
 
 {{< notice title="Note" collapsible="true" >}}
 {{< block mode="md">}}

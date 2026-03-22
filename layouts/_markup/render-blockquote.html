@@ -1,0 +1,30 @@
+{{- $type := .Type -}}
+{{- $alertType := .AlertType -}}
+{{- $alertSign := .AlertSign -}}
+{{- $alertTitle := .AlertTitle -}}
+
+{{- $labels := dict
+  "note"      "Note"
+  "tip"       "Tip"
+  "warning"   "Warning"
+  "important" "Important"
+  "caution"   "Caution"
+-}}
+{{- $defaultLabel := index $labels $alertType | default ($alertType | title) -}}
+{{- $title := or $alertTitle $defaultLabel -}}
+
+{{- if ne $type "alert" -}}
+<blockquote>
+  {{ .Text }}
+</blockquote>
+{{- else if $alertSign -}}
+<details class="callout callout-{{ $alertType }}"{{ if eq $alertSign "+" }} open{{ end }}>
+  <summary>{{ $title }}</summary>
+  {{ .Text }}
+</details>
+{{- else -}}
+<blockquote class="callout callout-{{ $alertType }}">
+  <strong>{{ $title }}</strong>
+  {{ .Text }}
+</blockquote>
+{{- end -}}
