@@ -1,10 +1,77 @@
 +++
 date = '2026-02-12T22:06:19+09:00'
 draft = true
-title = 'Git Submodule'
+slug = 'git-submodule'
+title = 'git submodule, 저장소 안에 다른 저장소 두기'
 +++
 
 upnote://x-callback-url/openNote?noteId=b5f6c82f-26dd-4af1-b717-7ee32525b90b
+
+Hugo로 블로그를 만들기 위해 Hugo의 [Getting Started](https://gohugo.io/getting-started/quick-start/) 문서를 따라하는데 테마를 설치하기 위해 Git 서브모듈(Submodule)을 사용하고 있었다.
+
+> Clone the [Ananke](https://github.com/theNewDynamic/gohugo-theme-ananke) theme into the `themes` directory, adding it to your project as a [Git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+>
+> ```sh
+> git submodule add https://github.com/theNewDynamic/gohugo-theme-ananke.git themes/ananke
+> ```
+
+Git 서브모듈은 저장소 안에 다른 저장소를 두고 관리하는 기능이다. 프로젝트에서 여러 모듈을 사용하고, 각 모듈마다 독립된 저장소가 있을 경우에 유용해 보이는 기능이다. 이 기능을 처음 접했을 때, 내가 작업하는 환경에서 적용해보고 싶었는데, 실제로 프로젝트 내에서 개발하는 여러 모듈들을 굳이 독립된 저장소로 분리할 일이 별로 없어서 써보지는 못했다. 서브모듈 저장소를 수정하면, 서브모듈과 상위 저장소를 둘다 커밋해야 해서 독립된 저장소가 꼭 필요한 경우가 아니면, 그냥 모노리포로 두는 것이 더 편하게 느껴졌다. 그리고 다른 사람이 개발하는 외부 모듈이라면, npm 등 보통 개발환경에서 제공하는 패키지 관리 시스템이 있으므로 굳이 Git 서브모듈을 쓸 필요가 없었다.
+
+Hugo의 경우, 테마를 사용하려면 `<Hugo_프로젝트_루트>/themes/{테마_이름}/` 디렉토리에 테마 파일들을 위치시켜야 하는데, 다른 사람이 만든 테마를 다운로드 받기 위해 Git을 이용하면, 이후 버전 업데이트도 쉬워지기 때문에 Git 서브모듈을 쓰는 방법을 소개하는 것 같다.
+```sh
+
+```
+
+
+
+
+
+
+
+https://themes.gohugo.io/
+
+---
+
+서브모듈 설정 없이, 상위 저장소와 하위 저장소가 있고, 하위 저장소에서 새로운 커밋을 한 뒤에 상위 저장소에서 git add 를 하는 경우, 다음과 같은 메시지가 나온다.
+```sh
+$ git add .
+warning: 내장 깃 저장소 추가: otherdir
+hint: You've added another git repository inside your current repository.
+hint: Clones of the outer repository will not contain the contents of
+hint: the embedded repository and will not know how to obtain it.
+hint: If you meant to add a submodule, use:
+hint:
+hint: 	git submodule add <url> otherdir
+hint:
+hint: If you added this path by mistake, you can remove it from the
+hint: index with:
+hint:
+hint: 	git rm --cached otherdir
+hint:
+hint: See "git help submodule" for more information.
+hint: Disable this message with "git config set advice.addEmbeddedRepo false"
+```
+
+그리고 상위 디렉토리에서 add 한 내용을 확인하면 다음과 같은데, 이는 서브모듈을 추가했을 때와 동일하다.
+```sh
+$ git diff --cached
+diff --git a/otherdir b/otherdir
+new file mode 160000
+index 0000000..bda5ffb
+--- /dev/null
++++ b/otherdir
+@@ -0,0 +1 @@
++Subproject commit bda5ffb2820a9427883a3fc460c54eedf55b3c39
+```
+
+```sh
+$ git ls-files -s otherdir
+160000 bda5ffb2820a9427883a3fc460c54eedf55b3c39 0	otherdir
+```
+
+---
+
+##
 
 ## 정리할 주제
 
