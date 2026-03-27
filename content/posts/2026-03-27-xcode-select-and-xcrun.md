@@ -1,5 +1,5 @@
 +++
-date = '2026-03-16T22:52:16+09:00'
+date = 2026-03-27T10:41:18+09:00
 slug = 'xcode-select-and-xcrun'
 draft = true
 title = 'xcode-select와 xcrun에 대해서'
