@@ -13,10 +13,21 @@ imageUrl = "본인_사진_경로"                                   # 생략 가
 imageTitle = "Jongwan"
 
 [markup]
+[markup.goldmark]
+[markup.goldmark.extensions]
+[markup.goldmark.extensions.passthrough]
+enable = true
+[markup.goldmark.extensions.passthrough.delimiters]
+block = [['\[', '\]'], ['$$', '$$']]
+inline = [['\(', '\)']]
+
+
 [markup.goldmark.parser.attribute]
 block = true
 title = true
 
+[params]
+math = true
 [params.fuseOpts]
 isCaseSensitive = false
 shouldSort = true
