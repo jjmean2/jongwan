@@ -1,5 +1,5 @@
 +++
-date = 2026-03-27T10:41:18+09:00
+date = 2026-03-30T00:13:57+09:00
 slug = 'xcode-select-and-xcrun'
 draft = true
 title = 'xcode-select와 xcrun에 대해서'
@@ -29,13 +29,10 @@ Xcode는 애플이 자랑(?)하는 IDE이다. iOS 개발을 위해서는 이게 
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 ^^^^^^^^^^^^^^^^^^^^^^^^
       앱 패키지
-
 ```
 
 여기서 `/Applications/Xcode.app`는 Xcode 앱 패키지의 위치다.
-![Xcode path](/images/xcode-path.png)
-
-{{< figure src="/images/xcode-path.png" alt="설명" width="300px" caption="캡션" >}}
+{{< figure src="/images/xcode-path.png" alt="Xcode Path" caption="Xcode가 설치된 위치" >}}
 
 iOS 개발 같은 경우에는 Xcode를 쓰지 않고 개발 환경을 잡기가 어렵지만, 프론트엔드 개발이나 서버 개발의 경우 Xcode 앱 자체는 거의 쓰지 않는다. 하지만, Xcode에서 제공하는 SDK와 각종 빌드 도구들은 개발 환경을 구성하기 위해 꼭 필요하기 때문에 애플에서는 이런 개발 도구들만 따로 패키징해서 [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=command%20line%20tools)를 제공한다.
 
@@ -62,7 +59,7 @@ CLT는 다음 위치에 설치되고, 동시에 여러 버전을 설치할 수 �
 > {{< figure src="/images/software-update.png" caption="시스템 설정 > 소프트웨어 업데이트" >}}
 
 
-CLT에 설치된 `git`과 `clang`의 위치는 다음과 같다. (macOS 26.3.1 버전 기준)
+CLT에 포함된 `git`과 `clang`의 위치는 다음과 같다. (macOS 26.3.1 버전 기준)
 
 ```sh
 /Library/Developer/CommandLineTools/usr/bin/git
@@ -71,13 +68,11 @@ CLT에 설치된 `git`과 `clang`의 위치는 다음과 같다. (macOS 26.3.1 �
 
 ## `xcode-select`로 개발환경 선택하기
 
-### macOS의 `/usr/bin` 에 들어있는 도구들 중 상당 부분은 shim이다.
+### macOS의 `/usr/bin`에 들어있는 도구들 중 상당 부분은 shim이다.
 
 shim은 틈을 메우거나 간격을 조절하는 얇은 조각을 뜻하는 것으로 가구의 수평을 맞추기 위해 한쪽 다리 밑에 괴어 놓는 나무조각 같은 걸 말한다고 한다. (참고: [Shim이란 무엇인가?](https://www.youtube.com/watch?v=BMaBWfsPi3c))
 
 ![영한 사전 shim](/images/dictionary-shim.png)
-
-       소프트웨어 업계에서 shim은 보통 호환성이이나
 
 소프트웨어 업계에서 shim은 보통 호환성이나 버전 관리를 위해 API 호출을 가로채서 다른 도구를 호출해주는 작은 코드 조각을 가리킨다.
 
@@ -101,11 +96,11 @@ $ git commit
 
 이 뿐만 아니라 `/usr/bin/git` 같은 shim은 Xcode나 CLT를 설치하기 전에도 존재하는데 아직 실제 `git`이 설치되어 있지 않았을 때 `git` 명령을 시도하면, Xcode나 CLT를 설치하라고 프롬프트를 띄워주는 것도 이 shim이 하는 일이다.
 
-### Active Developer Directory
+### Active Developer Directory와 `xcode-select`
 
 그럼 `/usr/bin/git`은 어디에 있는 파일을 실행할까? 시스템에는 Xcode가 설치되어 있을 수도 있고, CLT가 설치되어 있을 수도 있다. 그리고 둘다 설치되어 있을 수도 있으며, Xcode가 여러 버전이 설치되어 있을 수도 있다. `/usr/bin/git`은 어디에 있는 실행파일을 실행해야 할까?
 
-이 때 등장하는 것이 Active Developer Directory라는 개념이다. `/usr/bin/git`은 여러 개발환경이 설치된 디렉토리 중 미리 지정된 Active Developer Directory에 들어 있는 `git` 실행파일을 실행한다. 이렇게 지정된 개발환경을 찾아가는 것이 `/usr/bin/git` 같은 shim 파일들의 주요 역할이다. 그리고 Active Developer Directory를 설정하는 도구가 `xcode-select`이다. macOS에서 `xcode-select`의 manual page를 보면, Xcode 와 BSD 도구를 위한 Active Developer Directory를 관리하는 툴이라고 설명한다. `asdf`로 NodeJS 여러 버전을 설치해두고 필요에 따라 바꿔가면서 사용하는 것과 동일한 개념이라고 볼 수 있겠다.
+이 때 등장하는 것이 Active Developer Directory라는 개념이다. `/usr/bin/git`은 여러 개발 환경이 설치된 디렉토리 중 미리 지정된 Active Developer Directory에 들어 있는 `git` 실행파일을 실행한다. 이렇게 지정된 개발 환경을 찾아가는 것이 `/usr/bin/git` 같은 shim 파일들의 주요 역할이다. 그리고 Active Developer Directory를 설정하는 도구가 `xcode-select`이다. macOS에서 `xcode-select`의 manual page를 보면, Xcode 와 BSD 도구를 위한 Active Developer Directory를 관리하는 툴이라고 설명한다. `asdf`로 NodeJS 여러 버전을 설치해두고 필요에 따라 바꿔가면서 사용하는 것과 동일한 개념이라고 볼 수 있겠다.
 
 ```
 NAME
@@ -115,7 +110,7 @@ SYNOPSIS
        xcode-select [-h|--help] [-s|--switch <path>] [-p|--print-path] [-v|--version]
 ```
 
-`xcode-select`에서 `-p`, `--print-path` 옵션은 현재 설정된 Active Developer Directory를 출력하는 명령인데, 내 컴퓨터에서 해 보니 다음과 같이 Xcode 앱 내부의 `Developer` 라는 디렉토리를 가리켰다. 위에서 봤던 `git` 실행파일이 있던 디렉토리다.
+`xcode-select`에서 `-p`, `--print-path` 옵션은 현재 설정된 Active Developer Directory를 출력하는 명령인데, 내 컴퓨터에서 해 보니 다음과 같이 Xcode 앱 내부의 `Developer`라는 디렉토리를 가리켰다. 위에서 봤던 `git` 실행파일이 있던 디렉토리다.
 
 ```sh
 $ xcode-select -p
@@ -144,21 +139,204 @@ $ xcode-select -p
 개발 환경이 여러 개 설치되어 있는 경우, `xcode-select`로 이 중 하나를 Active Developer Directory로 선택하거나 기본값으로 리셋할 수 있다. 다음 명령은 모두 root 권한이 필요하다.
 
 ```sh
-# CLT를 active 개발 환경으로 선택, --switch 옵션
+# CLT를 active 개발 환경으로 선택. `-s` 또는 `--switch` 사용
 $ sudo xcode-select -s /Library/Developer/CommandLineTools
 
 # 별도로 다운로드한 Xcode 베타 버전을 개발 환경으로 선택
 $ sudo xcode-select -s "/Users/ljw/dev/other-xcode/Xcode Beta.app/Contents/Developer"
 
-# 기본값으로 리셋, --reset 옵션, Xcode가 있는 경우, Xcode가 선택되는 듯
+# 기본값으로 리셋. `-r` 또는 `--reset` 사용. Xcode가 있는 경우 Xcode가 선택되는 듯
 $ sudo xcode-select -r
 ```
 
 예전에 iOS 개발을 할 때는 실제로 새로운 Xcode 버전 배포 전후로 두 개의 버전을 유지하면서 써야 할 경우가 있었는데, 그 때 뭔가 버전 문제로 빌드가 잘 안 될 때, `xcode-select`로 개발 환경을 적절히 선택해야 해결되는 경우가 있었다.
 
-## Active Developer Directory에 있는 도구를 `xcrun`으로 찾거나 실행하기
+> [!TIP]+ `xcode-select`는 현재 설정을 어디에 저장하고 참조할까?
+>
+> 예를 들어 `asdf`는 현재 버전 설정 정보를 `.tool-versions` 파일에 다음과 같은 형식으로 저장하고 참조한다.
+>
+> ```sh
+> ruby 3.3.0
+> nodejs 24.12.0
+> golang 1.26.0
+> bun 1.3.10
+> deno 2.0.6
+> python 3.15.3
+> flutter 3.19.5-stable
+> ```
+>
+> global 설정은 Home 폴더에 이 `.tool-versions` 파일을 저장한다.
+>
+> 이런 식으로 `xcode-select`도 `xcode-select -s`로 지정한 Active Developer Directory 값을 저장하는 곳이 있을 텐데 **이것에 대한 답은 못 찾았다.**
+>
+> 이와 비슷한 질문을 하는 Stack Overflow 글은 찾았는데 [Where does xcode-select store information - Stack Overflow](https://stackoverflow.com/questions/14609738/where-does-xcode-select-store-information)이다. 여기서는 `/var/db/xcode_select_link`라는 파일을 언급했다. 실제로 `xcode-select`의 설정에 따라 이 파일이 생성되고 업데이트되긴 했는데, 이 파일을 삭제해도 `xcode-select`의 출력은 영향을 받지 않았다. 즉, 확실하진 않지만, 이 파일은 부산물이고, `xcode-select`가 참조하는 source of truth는 아닌 것으로 보였다. 아마도 내부적으로 따로 관리하는 DB가 있지 않을까? 이에 대한 정보는 찾기 어려워서 더 찾아보지는 않았다.
+>
+> ```sh
+> # 아무 설정도 하기 전에는 Xcode를 가리킨다. 이 때는 `/var/db/xcode_select_link`라는 파일이 없다.
+> $ xcode-select -p
+> /Applications/Xcode.app/Contents/Developer
+> $ ls -al /var/db/xcode_select_link
+>
+> # CLT를 가리키도록 설정한다.
+> $ sudo xcode-select -s /Library/Developer/CommandLineTools
+> /Library/Developer/CommandLineTools
+> $ xcode-select -p
+> /Library/Developer/CommandLineTools
+>
+> # `/var/db/xcode_select_link`라는 symlink가 생기고, CLT 디렉토리를 가리킨다.
+> $ ls -al /var/db/xcode_select_link
+> lrwxr-xr-x  1 root  wheel  35  3월 18 07:52 /var/db/xcode_select_link -> /Library/Developer/CommandLineTools
+>
+> # symlink를 직접 지워본다.
+> $ sudo rm -f /var/db/xcode_select_link
+>
+> # xcode-select는 여전히 CLT를 가리킨다. `/var/db/xcode_select_link`가 source of truth는 아닌 듯?
+> $ xcode-select -p
+> /Library/Developer/CommandLineTools
+> ```
 
-Xcode나 CLT에 설치된 도구들은 상당 부분 `git`처럼 `/usr/bin/` 쪽에 wrapper(shim)가 마련되어 있는 듯하다. 그러나 모든 도구가 다 그런 것은 아니고, 보통 Xcode나 CLT 설치 위치를 path 설정에 넣어놓진 않기에 wrapper가 없는 도구를 간결하게 실행하기가 어렵다. 물론 path 설정에 넣어놓는 방법도 있겠지만, 이를 도와줄 `xcrun`라는 도구가 존재한다.
+
+## `xcrun`, Active Developer Directory에 있는 도구를 찾거나 실행하는 명령
+
+Xcode나 CLT에 설치된 도구들은 상당 부분 `git`처럼 `/usr/bin/` 쪽에 shim이 마련되어 있는 듯하다. 그러나 모든 도구가 다 그런 것은 아니다. 보통 Xcode나 CLT 설치 위치를 path 설정에 넣어 놓진 않기에 shim이 없는 도구를 간결하게 실행하기가 어렵다. 물론 path 설정에 넣어놓는 방법도 있겠지만, 이를 도와줄 `xcrun`라는 도구가 존재한다.
+
+> [!NOTE]- Xcode와 함께 설치되었으나 `/usr/bin/`에 shim이 없는 도구들 예시
+>
+> ```sh
+> # `xcrun --find <command>`는 선택된 개발 환경에서 `<command>`의 파일 위치를 출력한다.
+> # `/usr/bin`의 실행파일들 목록과 개발 환경의 `git`, `clang` 명령이 있는 디렉토리의 실행파일들 목록을
+> # `git diff`로 비교하여 출력해보았다.
+> $ git diff <(ls /usr/bin | sort) <(echo git clang | xargs -n 1 xcrun --find | xargs -n 1 dirname | xargs -n 1 ls | sort | uniq) | grep '^+' | grep -v '^+++' | sed 's/^+//'
+> 2to3
+> 2to3-3.9
+> aarch64-swift-linux-musl-clang.cfg
+> aarch64-swift-linux-musl-clang++.cfg
+> altool
+> amlint
+> appintentsmetadataprocessor
+> appintentsnltrainingprocessor
+> appleProductTypesTool
+> appshortcutstringsprocessor
+> ba-package
+> ba-serve
+> backgroundassets-debug
+> bitcode_strip
+> bitcode-build-tool
+> byacc
+> cache-build-session
+> cktool
+> clang-cache
+> clang-cas-test
+> clang-format
+> clang-format-diff.py
+> clang-stat-cache
+> compileSceneKitShaders
+> compositeMD5
+> convertRichTextToAscii
+> copypng
+> copySceneKitAssets
+> coremlc
+> coremlcompiler
+> crashlog
+> CreateIPA
+> createml
+> docc
+> dyld_analyzer
+> embeddedBinaryValidationUtility
+> extractLocStrings
+> exutil
+> fmadapterc
+> fmadaptercompiler
+> gamepolicyctl
+> ibtoold
+> iig
+> instrumentbuilder
+> intentbuilderc
+> ipatool
+> ipatool2
+> iphoneos-optimize
+> iTMSTransporter
+> ld-classic
+> lldb-dap
+> llvm-cas
+> llvm-cov
+> llvm-cxxfilt
+> llvm-dwarfdump
+> llvm-nm
+> llvm-objdump
+> llvm-otool
+> llvm-profdata
+> llvm-readtapi
+> llvm-size
+> logdump
+> mapc
+> mcpbridge
+> metal
+> metal-package-builder
+> modules-verifier
+> momc
+> nm-classic
+> notarytool
+> otool-classic
+> pip3.9
+> placeholderutil
+> pngcrush
+> pydoc3
+> pydoc3.9
+> python3.9
+> readtapi
+> realitytool
+> referenceobjectc
+> referenceobjectcompiler
+> safari-web-extension-converter
+> safari-web-extension-packager
+> scalar
+> scntool
+> simctl
+> size-classic
+> snippet-extract
+> ssu-cli
+> ssu-cli-app
+> ssu-cli-nlu
+> swift-api-digester
+> swift-build
+> swift-build-tool
+> swift-cache-tool
+> swift-demangle
+> swift-driver
+> swift-experimental-sdk
+> swift-format
+> swift-frontend
+> swift-help
+> swift-package
+> swift-package-collection
+> swift-package-registry
+> swift-plugin-server
+> swift-run
+> swift-sdk
+> swift-stdlib-tool
+> swift-symbolgraph-extract
+> swift-synthesize-interface
+> swift-test
+> swinfo
+> tapi
+> tapi-analyze
+> TextureAtlas
+> TextureConverter
+> unwinddump
+> x86_64-swift-linux-musl-clang.cfg
+> x86_64-swift-linux-musl-clang++.cfg
+> xarsigner
+> xccov
+> xcdevice
+> xcdiagnose
+> xcindex-test
+> xcresulttool
+> xcsigningtool
+> xcstringstool
+> xctest
+```
+
 
 `xcrun`은 개발 도구를 실행하거나 위치를 찾아주는 도구인데, `xcode-select`로 선택한 Active Developer Directory를 반영한다. Active로 지정한 개발 환경에 들어있는 도구를 실행해주는 것이다.
 
@@ -189,7 +367,7 @@ $ xcrun simctl io booted screenshot screen.png
 
 그런데 지금 보니, `simctl`은 별개의 도구이고, Xcode 디렉토리 안에 들어 있어서 접근이 불편한 것을 `xcrun`을 통해 찾아서 실행하는 것이었다.
 
-`simctl` 뿐 아니라 `git`이나 `clang` 처럼 같은 다른 도구들도 `xcrun`을 통해 실행시킬 수 있다.
+`simctl` 뿐 아니라 `git`이나 `clang`처럼 같은 다른 도구들도 `xcrun`을 통해 실행시킬 수 있다.
 
 ```sh
 $ xcrun git status
@@ -239,51 +417,71 @@ $ xcode-select -p
 /Applications/Xcode.app/Contents/Developer
 ```
 
-### `xcode-select`는 현재 설정을 어디에 저장하고 참조할까?
 
-예를 들어 `asdf`는 현재 버전 설정 정보를 `.tool-versions` 파일에 다음과 같은 형식으로 저장하고 참조한다.
+## 빌드 시 사용할 SDK와 Toolchain 선택하기
+### 환경변수 `SDKROOT`, `TOOLCHAIN`를 이용한 선택
 
-```sh
-ruby 3.3.0
-nodejs 24.12.0
-golang 1.26.0
-bun 1.3.10
-deno 2.0.6
-python 3.15.3
-flutter 3.19.5-stable
-```
 
-global 설정은 Home 폴더에 이 `.tool-versions` 파일을 저장한다.
 
-이런 식으로 `xcode-select`도 `xcode-select -s`로 지정한 Active Developer Directory 값을 저장하는 곳이 있을텐데 이것에 대한 답은 못 찾았다.
 
-이와 비슷한 질문을 하는 Stack Overflow 글은 찾았는데 [Where does xcode-select store information - Stack Overflow](https://stackoverflow.com/questions/14609738/where-does-xcode-select-store-information)이다. 여기서는 `/var/db/xcode_select_link`라는 파일을 언급했다. 실제로 `xcode-select`의 설정에 따라 이 파일이 생성되고 업데이트되긴 했는데, 이 파일을 삭제해도 `xcode-select`의 출력은 영향을 받지 않았다. 즉, 확실하진 않지만, 이 파일은 부산물이고, `xcode-select`가 참조하는 source of truth는 아닌 것으로 보였다. 아마도 내부적으로 따로 관리하는 DB가 있지 않을까? 이에 대한 정보는 찾기 어려워서 더 찾아보지는 않았다.
+
+`xcrun`은 Active Developer Directory 외에도 사용할 SDK와 Toolchain을 지정해서 실행하는 기능이 있다. `--sdk <name>`와 `--toolchain <name>`이다.
 
 ```sh
-# 아무 설정도 하기 전에는 Xcode를 가리킨다. 이 때는 /var/db/xcode_select_link 라는 파일이 없다.
-$ xcode-select -p
-/Applications/Xcode.app/Contents/Developer
-$ ls -al /var/db/xcode_select_link
+# SDK로 iPhone OS를 선택
+$ xcrun --sdk iphoneos clang ...
 
-# CLT를 가리키도록 설정한다.
-$ sudo xcode-select -s /Library/Developer/CommandLineTools
-/Library/Developer/CommandLineTools
-$ xcode-select -p
-/Library/Developer/CommandLineTools
-
-# /var/db/xcode_select_link 라는 symlink가 생기고, CLT 디렉토리를 가리킨다.
-$ ls -al /var/db/xcode_select_link
-lrwxr-xr-x  1 root  wheel  35  3월 18 07:52 /var/db/xcode_select_link -> /Library/Developer/CommandLineTools
-
-# symlink를 직접 지워본다.
-$ sudo rm -f /var/db/xcode_select_link
-
-# xcode-select는 여전히 CLT를 가리킨다. /var/db/xcode_select_link가 source of truth는 아닌 듯?
-$ xcode-select -p
-/Library/Developer/CommandLineTools
+# Toolchain으로 swift를 선택
+$ xcrun --toolchain swift swiftc main.swift
 ```
 
----
+`sdk` 옵션에 넣을 수 있는 이름은 다음과 같은 것들이 있다.
+- `iphoneos`, `iphoneos26.4`
+- `iphonesimulator`, `iphonesimulator26.4`
+- `macosx`, `macosx26.4`
+- `watchos`, `watchos26.4`
+
+`xcodebuild -showsdks` 명령으로 시스템에 설치된 SDK 목록을 확인해 볼 수 있다.
+```sh
+$ xcodebuild -showsdks
+
+DriverKit SDKs:
+	DriverKit 25.4                	-sdk driverkit25.4
+
+iOS SDKs:
+	iOS 26.4                      	-sdk iphoneos26.4
+
+iOS Simulator SDKs:
+	Simulator - iOS 26.4          	-sdk iphonesimulator26.4
+
+macOS SDKs:
+	macOS 26.4                    	-sdk macosx26.4
+	macOS 26.4                    	-sdk macosx26.4
+
+tvOS SDKs:
+	tvOS 26.4                     	-sdk appletvos26.4
+
+tvOS Simulator SDKs:
+	Simulator - tvOS 26.4         	-sdk appletvsimulator26.4
+
+visionOS SDKs:
+	visionOS 26.4                 	-sdk xros26.4
+
+visionOS Simulator SDKs:
+	Simulator - visionOS 26.4     	-sdk xrsimulator26.4
+
+watchOS SDKs:
+	watchOS 26.4                  	-sdk watchos26.4
+
+watchOS Simulator SDKs:
+	Simulator - watchOS 26.4      	-sdk watchsimulator26.4
+```
+
+
+
+
+
+
 
 ### 참고자료
 
