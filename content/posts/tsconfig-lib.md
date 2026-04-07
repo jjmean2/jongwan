@@ -5,8 +5,33 @@ title = 'Tsconfig Lib'
 +++
 
 upnote://x-callback-url/openNote?noteId=4f4d3fcc-5fd1-417b-aad1-a5ce1696c838
-
 upnote://x-callback-url/openNote?noteId=a34ba10c-9621-4e8e-b551-65b7e225bd94
+
+
+tsconfig.json에서 typeRoots와 types는 직접 import하지 않아도 컴파일 과정에 포함할 타입 정의를 지정하는 것이다.
+upnote://x-callback-url/openNote?noteId=22548a24-6059-4670-86b6-b393f8868902
+
+
+
+
+
+https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/#the-dom-lib-now-contains-dom.iterable-and-dom.asynciterable
+
+> The dom lib Now Contains dom.iterable and dom.asynciterable
+> TypeScript’s lib option allows you to specify which global declarations your target runtime has. One option is dom to represent web environments (i.e. browsers, who implement the DOM APIs). Previously, the DOM APIs were partially split out into dom.iterable and dom.asynciterable for environments that didn’t support Iterables and AsyncIterables. This meant that you had to explicitly add dom.iterable to use iteration methods on DOM collections like NodeList or HTMLCollection.
+>
+> In TypeScript 6.0, the contents of lib.dom.iterable.d.ts and lib.dom.asynciterable.d.ts are fully included in lib.dom.d.ts. You can still reference dom.iterable and dom.asynciterable in your configuration file’s "lib" array, but they are now just empty files.
+>
+> Copy
+> // Before TypeScript 6.0, this required "lib": ["dom", "dom.iterable"]
+> // Now it works with just "lib": ["dom"]
+> for (const element of document.querySelectorAll("div")) {
+>     console.log(element.textContent);
+> }
+> This is a quality-of-life improvement that eliminates a common point of confusion, since no major modern browser lacks these capabilities. If you were already including both dom and dom.iterable, you can now simplify to just dom.
+>
+> See more at this issue and its corresponding pull request.
+>
 
 # Typescript tsconfig.json의 lib 설정과 @types/node 에 대해서
 
