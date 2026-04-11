@@ -6,20 +6,29 @@ body {
 
 .post-content h1 {
   font-size: 32px;
-  margin: 32px auto 24px;
+  margin: 40px auto 20px;
 }
 
 .post-content h2 {
   font-size: 26px;
-  margin: 28px auto 20px;
+  margin: 48px auto 18px;
 }
 
 .post-content h3 {
   font-size: 20px;
+  margin: 34px auto 14px;
 }
 
 .post-content h4 {
   font-size: 15px;
+  margin: 28px auto 12px;
+}
+
+.post-content p,
+.post-content ul,
+.post-content ol,
+.post-content figure {
+  margin-bottom: 18px;
 }
 
 .page-header h1 {
