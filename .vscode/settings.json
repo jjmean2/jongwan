@@ -5,5 +5,5 @@
     "editor.wordWrap": "bounded",
     "editor.defaultFormatter": "vscode.markdown-language-features"
   },
-  "commentTranslate.browse.mode": "inplace"
+  "commentTranslate.browse.mode": "contrast"
 }
