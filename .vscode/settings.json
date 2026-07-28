@@ -5,5 +5,32 @@
     "editor.wordWrap": "bounded",
     "editor.defaultFormatter": "vscode.markdown-language-features"
   },
-  "commentTranslate.browse.mode": "inplace"
+  "commentTranslate.browse.mode": "inplace",
+  "peacock.color": "#32BA91",
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#4fd0a9",
+    "activityBar.background": "#4fd0a9",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#a94fd0",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "activityBarTop.activeBackground": "#4fd0a9",
+    "activityBarTop.background": "#4fd0a9",
+    "activityBarTop.foreground": "#15202b",
+    "activityBarTop.inactiveForeground": "#15202b99",
+    "commandCenter.border": "#15202b99",
+    "commandCenter.foreground": "#15202b",
+    "sash.hoverBorder": "#4fd0a9",
+    "statusBar.background": "#32ba91",
+    "statusBar.debuggingBackground": "#32ba91",
+    "statusBar.debuggingForeground": "#15202b",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#279272",
+    "statusBarItem.remoteBackground": "#f3e6f8",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#32ba91",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#32ba9199",
+    "titleBar.inactiveForeground": "#15202b99"
+  }
 }

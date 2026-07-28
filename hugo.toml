@@ -59,3 +59,7 @@ ID = 'G-X28QBQ329W'
 [module]
 [[module.imports]]
 path = "github.com/adityatelange/hugo-PaperMod"
+
+[taxonomies]
+tag = "tags"
+category = "categories"
